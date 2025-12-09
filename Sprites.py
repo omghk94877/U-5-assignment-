@@ -62,21 +62,21 @@ class Ball(pygame.sprite.Sprite):
     else: 
       self.__dy = -self.__dy 
 
-class Bricks(pygame.sprite.Sprite):
-    def __init__(self,screen):
-        pass
 
-    def voilet(self):
-        pass
+class Brick(pygame.sprite.Sprite):
+    def __init__(self, x, y, color):
+        super().__init__()
 
-    def red(self):
-        pass
+        # brick size
+        width = 35
+        height = 20
 
-    def orange(self):
-        pass
+        #create a surface for the brick
+        self.image = pygame.Surface((width, height))
+        self.image.fill(color)
 
-    def green(self):
-        pass
+        #generate the rect based on the image
+        self.rect = self.image.get_rect()
 
-    def blue(self):
-        pass
+        #position the rect
+        self.rect.topleft = (x, y)

@@ -3,7 +3,7 @@ import pygame
 
 class Game: 
     def __init__(self):
-        pygame.__init__()
+        pygame.init()
 
         #screen is 630 wide because 630 is divisible by 18, to put 18 bricks in a row
         self.screen = pygame.display.set_mode((630, 1000)) 
@@ -24,33 +24,43 @@ class Game:
         #background
         self.background = pygame.image.load("background.png")
         self.background = pygame.transform.scale(self.background, self.screen.get_size())
-
-        #background music
-        #pygame.mixer.music.load("music.mp3")
-        #pygame.mixer.music.play(False)
-
-        #initialize screen
-        self.screen.blit(self.background, (0, 0)) 
+        self.screen.blit(self.background, (0, 0))
 
 
+        #colour for each row
+        colors = [
+            (148, 0, 211),   # violet
+            (255, 0, 0),     # red
+            (255, 165, 0),   # orange
+            (0, 128, 0),     # green
+            (0, 0, 255),     # blue
+            (75, 0, 130),    # indigo
+        ]
+
+        brick_width = 35
+        brick_height = 20
 
 
-        #sound effects
-        self.sound = pygame.mixer.Sound("hit.wav")
+        #create a bricks group
+        self.bricks = pygame.sprite.Group()
 
-        #create bricks, put all bricks in list
-        self.bricks = []
-        for i in range(108): 
-            self.bricks.append(Sprites.Bricks(self.screen)) 
-        #assign paddle
+        for row in range(6):
+            for col in range(18):
+                x = col * brick_width
+                y = row * brick_height + 20
+                color = colors[row]
+                brick = Sprites.Brick(x, y, color)
+                self.bricks.add(brick)
+
+        #create paddle and ball 
         self.paddle = Sprites.Paddle(self.screen)
-        self.moving_paddle = self.paddle
-        
-        #assign ball sprite
         self.ball = Sprites.Ball(self.screen)
 
-        #put them all into one sprite
-        self.allSprites = pygame.sprite.Group(self.bricks, self.paddle)
+        #all sprites group
+        self.allSprites = pygame.sprite.Group()
+        self.allSprites.add(self.paddle, self.ball)
+        self.allSprites.add(self.bricks)  # add all bricks
+
 
     def alter(self):
 
@@ -67,16 +77,18 @@ class Game:
                     keepGoing = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                        self.moving_paddle.moving_left
+                        Sprites.Paddle.moving_left()
                     elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                        self.moving_paddle.moving_right
+                        Sprites.Paddle.moving_right()
             self.check_coll()
+            self.update()
+            self.refresh()
         pass
 
     def check_coll(self):
 
         #collision between ball and paddle
-        if self.ball.rect.collidedict(self.moving_paddle):
+        if self.ball.rect.collidedict(Sprites.Paddle.rect):
             self.ball.change_direction
 
         #collision between ball and wall
@@ -87,13 +99,18 @@ class Game:
             self.ball.change_direction
 
         #collision between ball and brick
-        for i in self.bricks:
-            pass
+        for brick in self.bricks:
+            if self.ball.rect.colliderect(brick.rect):
+                self.bricks.remove(brick)
+                self.ball.change_direction()
+                
+
+            
 
         # REFRESH SCREEN 
         self.refresh()
         
-    def check_others(self):
+    def update(self):
         pass
 
     def refresh(self):
