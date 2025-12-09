@@ -4,7 +4,7 @@ class Paddle(pygame.sprite.Sprite):
     def __init__(self,screen):
         pygame.sprite.Sprite.__init__(self) 
         self.screen = screen
-        self.lives = 3
+        self.image = pygame.draw.rect()
         pass
 
     def moving_left(self):
@@ -13,15 +13,54 @@ class Paddle(pygame.sprite.Sprite):
     def moving_right(self):
         pass
 
-class Ball(pygame.sprite.Sprite):
-    def __init__(self,screen):
-        pass
+class Ball(pygame.sprite.Sprite): 
+  '''This class defines the sprite for the Ball.''' 
+  
+  def __init__(self, screen): 
+    '''This initializer takes a screen surface as a parameter, initializes  the image and rect attributes, and x,y direction of the ball.''' 
+    # Call the parent __init__() method 
+    pygame.sprite.Sprite.__init__(self) 
+    # Create a small transparent surface for the ball and draw a yellow circle
+    radius = 10
+    diameter = radius * 2
+    self.image = pygame.Surface((diameter, diameter), pygame.SRCALPHA).convert_alpha()
+    pygame.draw.circle(self.image, (255, 255, 0), (radius, radius), radius)
+    self.rect = self.image.get_rect() 
+    self.rect.center = (screen.get_width()/2,screen.get_height()/2) 
+    # Instance variables to keep track of the screen surface 
+    # and set the initial x and y vector for the ball. 
+    self.__screen = screen 
+    self.__dx = 5 
+    self.__dy = -3 
+    
+  def change_direction(self): 
+    '''This method causes the x direction of the ball to reverse.''' 
+    self.__dx = -self.__dx 
+    self.__dy = -self.__dy
 
-    def moving(self):
-        pass
 
-    def update(self):
-        pass
+  
+
+  def update(self): 
+    '''This method will be called automatically to reposition the 
+    ball sprite on the screen.''' 
+    # Check if we have reached the left or right end of the screen. 
+    # If not, keep moving the ball in the same x direction. 
+    if ((self.rect.left > 0) and (self.__dx < 0)) or ((self.rect.right < self.__screen.get_width()) 
+    and (self.__dx > 0)):  
+      self.rect.left += self.__dx 
+    # If yes, then reverse the x direction.  
+    else: 
+      self.__dx = -self.__dx 
+    
+    # Check if we have reached the top or bottom of the court.
+    # If not, keep moving the ball in the same y direction. 
+    if ((self.rect.top-40 > 0) and (self.__dy > 0)) or  ((self.rect.bottom+40 < self.__screen.get_height()) 
+    and (self.__dy < 0)):  
+      self.rect.top -= self.__dy 
+      # If yes, then reverse the y direction.  
+    else: 
+      self.__dy = -self.__dy 
 
 class Bricks(pygame.sprite.Sprite):
     def __init__(self,screen):
