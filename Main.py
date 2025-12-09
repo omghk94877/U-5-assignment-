@@ -36,7 +36,7 @@ class Game:
 
 
         #sound effects
-        self.sound = pygame.mixer.Sound("sound.wav")
+        self.sound = pygame.mixer.Sound("hit.wav")
 
         #create bricks, put all bricks in list
         self.bricks = []
