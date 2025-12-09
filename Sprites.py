@@ -20,6 +20,9 @@ class Ball(pygame.sprite.Sprite):
     def moving(self):
         pass
 
+    def update(self):
+        pass
+
 class Bricks(pygame.sprite.Sprite):
     def __init__(self,screen):
         pass
