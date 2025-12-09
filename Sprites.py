@@ -21,7 +21,7 @@ class Ball(pygame.sprite.Sprite):
         pass
 
 class Bricks(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,screen):
         pass
 
     def voilet(self):
