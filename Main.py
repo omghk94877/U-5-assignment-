@@ -6,8 +6,8 @@ class Game:
         pygame.__init__()
 
         #screen is 630 wide because 630 is divisible by 18, to put 18 bricks in a row
-        self.screen = pygame.display.set_mode((630, 1000)) 
-        pygame.display.set_caption("Super Break Out!!!!") 
+        #self.screen = pygame.display.set_mode((630, 1000)) 
+        #pygame.display.set_caption("Super Break Out!!!!") 
 
         self.entities()
         self.alter()
@@ -68,6 +68,7 @@ class Game:
                     elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                         self.moving_paddle.moving_right
             self.check_coll()
+            self.check_others()
             self.refresh()
 
         pass
@@ -75,7 +76,10 @@ class Game:
     def check_coll(self):
         for i in self.bricks:
             pass
-    
+        
+    def check_others(self):
+        pass
+
     def refresh(self):
         self.allSprites.clear(self.screen, self.background) 
         self.allSprites.update() 
