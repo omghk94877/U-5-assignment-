@@ -1,6 +1,7 @@
 this is a game similar to Brake-out 
 
 minumum requirement of the program
+
     system :
         - windows
             - windows 7
