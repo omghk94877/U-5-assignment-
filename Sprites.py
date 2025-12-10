@@ -141,7 +141,7 @@ class Brick(pygame.sprite.Sprite):
         self.rect.center = (self.pos_x, self.pos_y)
 
     def move_down(self):
-        pass
+        self.pos_y += 2
 
 
 
