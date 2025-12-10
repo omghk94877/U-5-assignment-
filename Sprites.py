@@ -5,11 +5,13 @@ class Paddle(pygame.sprite.Sprite):
         self.screen = screen
         pygame.sprite.Sprite.__init__(self) 
         self.screen = screen
-        # Paddle size and appearance
+
+        #Paddle size and appearance
         width, height = 100, 20
         self.image = pygame.Surface((width, height))
         self.image.fill((200, 200, 200))
-        # create rect and place near bottom center of the screen
+        
+        #create rect and place near bottom center of the screen
         self.rect = self.image.get_rect()
         self.rect.midbottom = (screen.get_width() // 2, screen.get_height() - 30)
         self.dx = 0
