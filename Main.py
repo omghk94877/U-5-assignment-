@@ -122,6 +122,7 @@ class Game:
                 brick.kill()
                 self.ball.change_direction()
                 self.bricks.remove(brick)
+                self.hit_sound.play()
                 for i in self.bricks:
                     i.move_down()
 
