@@ -77,26 +77,25 @@ class Game:
                     keepGoing = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                        Sprites.Paddle.moving_left()
+                        self.paddle.moving_left()
                     elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                        Sprites.Paddle.moving_right()
+                        self.paddle.moving_right()
             self.check_coll()
-            self.update()
             self.refresh()
         pass
 
     def check_coll(self):
 
         #collision between ball and paddle
-        if self.ball.rect.collidedict(Sprites.Paddle.rect):
-            self.ball.change_direction
+        if self.ball.rect.colliderect(self.paddle.rect):
+            self.ball.change_direction()
 
         #collision between ball and wall
         if self.ball.rect.centerx < 0 or self.ball.rect.centerx > self.screen.get_width():
-            self.ball.change_direction
+            self.ball.change_direction()
         
         if self.ball.rect.centery < 0 or self.ball.rect.centery > self.screen.get_height():
-            self.ball.change_direction
+            self.ball.change_direction()
 
         #collision between ball and brick
         for brick in self.bricks:
@@ -118,8 +117,7 @@ class Game:
         self.allSprites.update() 
         self.allSprites.draw(self.screen) 
           
-        pygame.display.flip() 
+        pygame.display.flip()
 
 
 
-        

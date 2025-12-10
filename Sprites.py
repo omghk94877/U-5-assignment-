@@ -4,14 +4,24 @@ class Paddle(pygame.sprite.Sprite):
     def __init__(self,screen):
         pygame.sprite.Sprite.__init__(self) 
         self.screen = screen
-        self.image = pygame.draw.rect()
-        pass
+        # Paddle size and appearance
+        width, height = 100, 20
+        self.image = pygame.Surface((width, height))
+        self.image.fill((200, 200, 200))
+        # create rect and place near bottom center of the screen
+        self.rect = self.image.get_rect()
+        self.rect.midbottom = (screen.get_width() // 2, screen.get_height() - 30)
+        self.speed = 5
 
     def moving_left(self):
-        pass
+        self.rect.x -= self.speed
+        if self.rect.left < 0:
+            self.rect.left = 0
 
     def moving_right(self):
-        pass
+        self.rect.x += self.speed
+        if self.rect.right > self.screen.get_width():
+            self.rect.right = self.screen.get_width()
 
 class Ball(pygame.sprite.Sprite): 
   '''This class defines the sprite for the Ball.''' 
