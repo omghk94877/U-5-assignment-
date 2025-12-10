@@ -25,6 +25,8 @@ class Paddle(pygame.sprite.Sprite):
             self.rect.right = self.screen.get_width()
 
     def update(self):
+      #self.rect.x, self.rect.y = pygame.mouse.get_pos()
+      #self.rect.x = self.rect.x
       self.rect.x += self.dx
 
       if self.rect.left < 0:

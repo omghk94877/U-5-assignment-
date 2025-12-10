@@ -39,11 +39,11 @@ class Game:
         #colour for each row
         colors = [
             (75,0,130), #darker purple
-            (148, 0, 211),  # violet
-            (255, 0, 0),      # red
-            (255, 165, 0),   # orange
-            (0, 128, 0),   # green
-            (0, 0, 255),  # blue
+            (148, 0, 211),  #violet
+            (255, 0, 0),      #red
+            (255, 165, 0),   #orange
+            (0, 128, 0),   #green
+            (0, 0, 255),  #blue
         ]
 
         brick_width = 35
@@ -51,15 +51,15 @@ class Game:
 
 
         #create a bricks group
-        self.bricks = pygame.sprite.Group()
+        self.bricks = []
 
         for row in range(6):
             for col in range(18):
                 x = col * brick_width
-                y = row * brick_height + 20
+                y = row * brick_height
                 color = colors[row]
                 brick = Sprites.Brick(x, y, color)
-                self.bricks.add(brick)
+                self.bricks.append(brick)
 
         #create paddle and ball 
         self.paddle = Sprites.Paddle(self.screen)
@@ -121,9 +121,7 @@ class Game:
 
         # REFRESH SCREEN 
         self.refresh()
-        
-    def update(self):
-        pass
+
 
     def refresh(self):
         self.allSprites.clear(self.screen, self.background) 
