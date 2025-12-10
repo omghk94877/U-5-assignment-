@@ -4,9 +4,16 @@ import pygame
 class Game: 
     def __init__(self):
         pygame.init()
+        # ensure mixer is initialized (some systems need explicit init)
+        try:
+            if not pygame.mixer.get_init():
+                pygame.mixer.init()
+        except Exception:
+            # continue even if mixer fails; sound will be disabled
+            pass
 
         #screen is 630 wide because 630 is divisible by 18, to put 18 bricks in a row
-        self.screen = pygame.display.set_mode((630, 1000)) 
+        self.screen = pygame.display.set_mode((630, 700)) 
         pygame.display.set_caption("Super Break Out!!!!") 
 
         self.entities()
@@ -26,17 +33,17 @@ class Game:
         self.background = pygame.transform.scale(self.background, self.screen.get_size())
         self.screen.blit(self.background, (0, 0))
 
-        self.sound = pygame.mixer.Sound("hit.wav")
+        #self.sound = pygame.mixer.Sound("hit.wav")
 
 
         #colour for each row
         colors = [
+            (75,0,130), #darker purple
             (148, 0, 211),  # violet
             (255, 0, 0),      # red
             (255, 165, 0),   # orange
             (0, 128, 0),   # green
             (0, 0, 255),  # blue
-            (75, 0, 130),   # indigo
         ]
 
         brick_width = 35
@@ -89,8 +96,10 @@ class Game:
     def check_coll(self):
 
         #collision between ball and paddle
-        if self.ball.rect.colliderect(self.paddle.rect):
+        if self.paddle.rect.colliderect(self.ball.rect):
             self.ball.change_direction()
+        
+        
 
         #collision between ball and wall
         if self.ball.rect.centerx < 0 or self.ball.rect.centerx > self.screen.get_width():
@@ -105,7 +114,7 @@ class Game:
                 brick.kill()
                 self.bricks.remove(brick)
                 self.ball.change_direction()
-                self.sound.play()
+                #self.sound.play()
                 
 
             

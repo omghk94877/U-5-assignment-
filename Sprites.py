@@ -2,6 +2,7 @@ import pygame
 
 class Paddle(pygame.sprite.Sprite):
     def __init__(self,screen):
+        self.screen = screen
         pygame.sprite.Sprite.__init__(self) 
         self.screen = screen
         # Paddle size and appearance
@@ -11,17 +12,27 @@ class Paddle(pygame.sprite.Sprite):
         # create rect and place near bottom center of the screen
         self.rect = self.image.get_rect()
         self.rect.midbottom = (screen.get_width() // 2, screen.get_height() - 30)
-        self.speed = 5
+        self.dx = 0
 
     def moving_left(self):
-        self.rect.x -= self.speed
+        self.dx = -5
         if self.rect.left < 0:
             self.rect.left = 0
 
     def moving_right(self):
-        self.rect.x += self.speed
-        if self.rect.right > self.screen.get_width():
+          self.dx = 5
+          if self.rect.right > self.screen.get_width():
             self.rect.right = self.screen.get_width()
+
+    def update(self):
+      self.rect.x += self.dx
+
+      if self.rect.left < 0:
+          self.rect.left = 0
+      elif self.rect.right > self.screen.get_width():
+         self.rect.right = self.screen.get_width()
+
+          
 
 class Ball(pygame.sprite.Sprite): 
   '''This class defines the sprite for the Ball.''' 
@@ -90,3 +101,10 @@ class Brick(pygame.sprite.Sprite):
 
         #position the rect
         self.rect.topleft = (x, y)
+
+        border_color = (0, 0, 0)  # black border
+        border_rect = self.image.get_rect()  # border rect matches the brick size
+        pygame.draw.rect(self.image, border_color, border_rect, 2)  # 2 = border thickness
+
+    def update(self):
+       pass
