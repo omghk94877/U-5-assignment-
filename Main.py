@@ -59,15 +59,15 @@ class Game:
 
 
         #create a bricks group
-        self.bricks = []
+        self.bricks = pygame.sprite.Group()
 
         for row in range(6):
             for col in range(18):
                 x = col * brick_width
                 y = row * brick_height
                 color = colors[row]
-                brick = Sprites.Brick(x, y, color)
-                self.bricks.append(brick)
+                self.brick = Sprites.Brick(x, y, color)
+                self.bricks.add(self.brick)
 
         #create paddle and ball 
         self.paddle = Sprites.Paddle(self.screen)
@@ -75,7 +75,7 @@ class Game:
 
         #all sprites group
         self.allSprites = pygame.sprite.Group()
-        self.allSprites.add(self.paddle, self.ball)
+        self.allSprites.add(self.paddle, self.ball, self.bricks)
         self.allSprites.add(self.bricks)  # add all bricks
 
 
@@ -120,9 +120,11 @@ class Game:
         for brick in self.bricks:
             if self.ball.rect.colliderect(brick.rect):
                 brick.kill()
-                self.bricks.remove(brick)
                 self.ball.change_direction()
-                #Sprites.Brick.move_down()
+                self.bricks.remove(brick)
+                for i in self.bricks:
+                    i.move_down()
+
                 #self.sound.play()
                 
 
