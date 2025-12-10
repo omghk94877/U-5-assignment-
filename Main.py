@@ -16,6 +16,16 @@ class Game:
         self.screen = pygame.display.set_mode((630, 700)) 
         pygame.display.set_caption("Super Break Out!!!!") 
 
+        pygame.mixer.init()
+
+
+        pygame.mixer.music.load("src\\sound\\dvofak-9.mp3")
+        pygame.mixer.music.set_volume(1)
+        pygame.mixer.music.play(-1)  # Loop forever
+
+        self.hit_sound = pygame.mixer.Sound("src\\sound\\hit.wav")
+        self.hit_sound.set_volume(0.5)
+
         self.entities()
         self.alter()
 
@@ -29,11 +39,9 @@ class Game:
 
     def entities(self):
         #background
-        self.background = pygame.image.load("background.png")
+        self.background = pygame.image.load("src\\image\\background.png")
         self.background = pygame.transform.scale(self.background, self.screen.get_size())
         self.screen.blit(self.background, (0, 0))
-
-        #self.sound = pygame.mixer.Sound("hit.wav")
 
 
         #colour for each row
@@ -98,7 +106,7 @@ class Game:
         #collision between ball and paddle
         if self.paddle.rect.colliderect(self.ball.rect):
             self.ball.change_direction()
-        
+            self.hit_sound.play()
         
 
         #collision between ball and wall
