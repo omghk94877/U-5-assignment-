@@ -26,15 +26,17 @@ class Game:
         self.background = pygame.transform.scale(self.background, self.screen.get_size())
         self.screen.blit(self.background, (0, 0))
 
+        self.sound = pygame.mixer.Sound("hit.wav")
+
 
         #colour for each row
         colors = [
-            (148, 0, 211),   # violet
-            (255, 0, 0),     # red
+            (148, 0, 211),  # violet
+            (255, 0, 0),      # red
             (255, 165, 0),   # orange
-            (0, 128, 0),     # green
-            (0, 0, 255),     # blue
-            (75, 0, 130),    # indigo
+            (0, 128, 0),   # green
+            (0, 0, 255),  # blue
+            (75, 0, 130),   # indigo
         ]
 
         brick_width = 35
@@ -100,8 +102,10 @@ class Game:
         #collision between ball and brick
         for brick in self.bricks:
             if self.ball.rect.colliderect(brick.rect):
+                brick.kill()
                 self.bricks.remove(brick)
                 self.ball.change_direction()
+                self.sound.play()
                 
 
             
@@ -120,4 +124,4 @@ class Game:
         pygame.display.flip()
 
 
-
+Game()
