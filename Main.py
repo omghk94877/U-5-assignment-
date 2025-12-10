@@ -5,12 +5,12 @@ class Game:
     def __init__(self):
         pygame.init()
         # ensure mixer is initialized (some systems need explicit init)
-        try:
+        """try:
             if not pygame.mixer.get_init():
                 pygame.mixer.init()
         except Exception:
             # continue even if mixer fails; sound will be disabled
-            pass
+            pass"""
 
         #screen is 630 wide because 630 is divisible by 18, to put 18 bricks in a row
         self.screen = pygame.display.set_mode((630, 700)) 
@@ -114,6 +114,7 @@ class Game:
                 brick.kill()
                 self.bricks.remove(brick)
                 self.ball.change_direction()
+                #Sprites.Brick.move_down()
                 #self.sound.play()
                 
 

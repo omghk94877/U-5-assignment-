@@ -110,5 +110,5 @@ class Brick(pygame.sprite.Sprite):
         border_rect = self.image.get_rect()  # border rect matches the brick size
         pygame.draw.rect(self.image, border_color, border_rect, 2)  # 2 = border thickness
 
-    def update(self):
+    def move_down(self):
        pass
