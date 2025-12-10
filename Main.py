@@ -67,7 +67,7 @@ class Game:
 
         #all sprites group
         self.allSprites = pygame.sprite.Group()
-        self.allSprites.add(self.paddle, self.ball)
+        self.allSprites.add(self.paddle, self.ball, self.bricks)
         self.allSprites.add(self.bricks)  # add all bricks
 
 

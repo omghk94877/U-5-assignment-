@@ -1,4 +1,5 @@
 import pygame
+import math
 
 class Paddle(pygame.sprite.Sprite):
     def __init__(self,screen):
@@ -91,24 +92,56 @@ class Ball(pygame.sprite.Sprite):
 class Brick(pygame.sprite.Sprite):
     def __init__(self, x, y, color):
         super().__init__()
+        self.color = color
+        self.outline_color = (255, 255, 255)  # white outline
+        self.angle = 0
+        self.size = 15
+        self.create_star_image()
+        
+        #Position the rect
+        #17.5 bc half of 35, which is the width. Same as 10
+        self.rect.center = (x + 17.5, y + 10)  #Center of brick
+        self.pos_x = x + 17.5
+        self.pos_y = y + 10
 
-        # brick size
-        width = 35
-        height = 20
-
-        #create a surface for the brick
-        self.image = pygame.Surface((width, height))
-        self.image.fill(color)
-
-        #generate the rect based on the image
+    def create_star_image(self):
+        """Create a rotating star shape"""
+        #Create surface large enough for rotated star
+        surface_size = 50
+        self.image = pygame.Surface((surface_size, surface_size), pygame.SRCALPHA)
+        
+        #Draw 5-point star
+        center_x, center_y = surface_size // 2, surface_size // 2
+        points = []
+        
+        for i in range(10):
+            # Alternate between outer and inner radius
+            if i % 2 == 0:
+                radius = self.size
+            else:
+                radius = self.size * 0.4
+            
+            angle_rad = math.radians(self.angle + (i * 36))
+            px = center_x + radius * math.cos(angle_rad)
+            py = center_y - radius * math.sin(angle_rad)
+            points.append((px, py))
+        
+        # Draw filled star
+        if len(points) > 2:
+            pygame.draw.polygon(self.image, self.color, points)
+            pygame.draw.polygon(self.image, self.outline_color, points, 2)
+        
         self.rect = self.image.get_rect()
+        #self.rect.center = (self.pos_x, self.pos_y)
 
-        #position the rect
-        self.rect.topleft = (x, y)
-
-        border_color = (0, 0, 0)  # black border
-        border_rect = self.image.get_rect()  # border rect matches the brick size
-        pygame.draw.rect(self.image, border_color, border_rect, 2)  # 2 = border thickness
+    def update(self):
+        """Spin the star continuously"""
+        self.angle = (self.angle + 5) % 360
+        self.create_star_image()
+        self.rect.center = (self.pos_x, self.pos_y)
 
     def move_down(self):
-       pass
+        pass
+
+
+
