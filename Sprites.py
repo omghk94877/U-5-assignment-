@@ -2,14 +2,20 @@ import pygame
 import math
 
 class Paddle(pygame.sprite.Sprite):
+
+    #width type default is medium
     def __init__(self, screen, width_type="medium"):
         pygame.sprite.Sprite.__init__(self) 
+
+        #get screen infomation
         self.screen = screen
         self.width_type = width_type
         
-        # Requirement: Adjustable Paddle Width
-        # extra_large is 1/2 screen size
+        #Adjustable paddle width
+        # extra_large is half screen size
         screen_w = screen.get_width()
+
+        #different size for the paddle
         self.sizes = {
             "small": 60,
             "medium": 100,
@@ -17,6 +23,7 @@ class Paddle(pygame.sprite.Sprite):
             "extra_large": screen_w // 2
         }
         
+        #paddle info
         self.width = self.sizes.get(width_type, 100)
         self.height = 20
         self.color = (200, 200, 200)
@@ -31,13 +38,16 @@ class Paddle(pygame.sprite.Sprite):
     def create_image(self):
         self.image = pygame.Surface((self.width, self.height))
         self.image.fill(self.color)
-        # Add a visual outline
+        #Add a visual outline
         pygame.draw.rect(self.image, (100,100,100), (0,0,self.width,self.height), 2)
 
     def shrink(self):
         """Requirement: Reduce paddle width by 50%"""
         center = self.rect.center
+        #multiply by half
         self.width = int(self.width * 0.5)
+
+        #create image
         self.create_image()
         self.rect = self.image.get_rect()
         self.rect.center = center
@@ -53,15 +63,14 @@ class Paddle(pygame.sprite.Sprite):
             self.rect.right = self.screen.get_width()
 
     def update(self):
-        # Reset dx each frame to stop movement if key isn't held
-        # (Optional: depends on how your main loop handles keys, 
-        # but usually safer to zero it out or rely on held keys)
+        #Reset dx each frame to stop movement if key isn't held
         self.dx = 0 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.dx = -7
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.dx = 7
+
 
         self.rect.x += self.dx
 
@@ -77,13 +86,15 @@ class Ball(pygame.sprite.Sprite):
   
   def __init__(self, screen): 
     pygame.sprite.Sprite.__init__(self) 
+
+    #setting ball's entities
     radius = 8
     diameter = radius * 2
     self.image = pygame.Surface((diameter, diameter), pygame.SRCALPHA).convert_alpha()
     pygame.draw.circle(self.image, (255, 255, 0), (radius, radius), radius)
     self.rect = self.image.get_rect() 
     
-    # Place ball explicitly
+    #Place ball explicitly
     self.reset_position(screen)
     
     self.__screen = screen 
@@ -109,13 +120,17 @@ class Ball(pygame.sprite.Sprite):
       self.__dy = -self.__dy
 
   def update(self): 
+
+    #moving the ball
     self.rect.x += self.__dx
     self.rect.y += self.__dy
     
-    # Wall collisions (Left/Right)
+    #Wall collisions left/right
     if self.rect.left <= 0:
         self.rect.left = 0
         self.bounce_x()
+
+    #wall collision
     elif self.rect.right >= self.__screen.get_width():
         self.rect.right = self.__screen.get_width()
         self.bounce_x()
@@ -169,11 +184,13 @@ class Brick(pygame.sprite.Sprite):
 
     def update(self):
         """Spin the star continuously"""
+
+        #plus 3 degree each time
         self.angle = (self.angle + 3) % 360
         self.create_star_image()
         self.rect.center = (self.pos_x, self.pos_y)
 
     def move_down(self):
-        """Requirement: Move bricks down 1-2 pixels"""
+        #Move bricks down 1-2 pixels
         self.pos_y += 1
         self.rect.center = (self.pos_x, self.pos_y)
