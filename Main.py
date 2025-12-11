@@ -14,6 +14,7 @@ class Button:
     """
 
     def __init__(self, rect, text, onclick, font, bg=(80,80,80), hover_bg=(110,110,110), text_color=(255,255,255)):
+        #initialize everything in the introduction screen
         self.rect = pygame.Rect(rect)
         self.text = text
         self.onclick = onclick
@@ -26,6 +27,7 @@ class Button:
         self.text = new_text
 
     def draw(self, surface):
+        #play hover efffect if mouse on button
         mouse = pygame.mouse.get_pos()
         is_hover = self.rect.collidepoint(mouse)
         color = self.hover_bg if is_hover else self.bg
@@ -40,7 +42,6 @@ class Button:
                 if callable(self.onclick):
                     self.onclick()
 
-# Screen base class
 class Screen:
     def __init__(self, app):
         self.app = app
@@ -57,8 +58,9 @@ class Screen:
         pass
 
 
-# Main Menu Screen
 class MainMenu(Screen):
+    """
+    """
     def __init__(self, app):
         super().__init__(app)
         w, h = app.size
@@ -68,14 +70,15 @@ class MainMenu(Screen):
         self.title_font = pygame.font.SysFont(None, 56)
         self.font = pygame.font.SysFont(None, 28)
 
-        #Requirement: Adjustable Paddle Width
+        #Adjustable paddle width
         self.paddle_options = ["small", "medium", "large", "extra_large"]
         self.current_paddle_idx = 1 # Start at medium
 
         self.paddle_btn = Button((cx, top + 0*(btn_h+14), btn_w, btn_h), 
                                  f"Paddle: {self.paddle_options[self.current_paddle_idx]}", 
                                  self.cycle_paddle, self.font)
-
+        
+        #3 buttons, play, intro or quit
         self.buttons = [
             self.paddle_btn,
             Button((cx, top + 1*(btn_h+14), btn_w, btn_h), "Play", self.start_game, self.font),
@@ -84,9 +87,15 @@ class MainMenu(Screen):
         ]
 
     def cycle_paddle(self):
+
+        #choosing paddle size
         self.current_paddle_idx = (self.current_paddle_idx + 1) % len(self.paddle_options)
         choice = self.paddle_options[self.current_paddle_idx]
+
+        #showing different size of the paddle
         self.paddle_btn.update_text(f"Paddle: {choice}")
+
+        #use the selected paddle as the choice
         self.app.selected_paddle = choice
 
     def start_game(self):
@@ -99,10 +108,14 @@ class MainMenu(Screen):
         self.app.running = False
 
     def handle_event(self, event):
+
+        #exccute the function if one of the button is clicked
         for b in self.buttons:
             b.handle_event(event)
 
     def draw(self, surface):
+
+        #fill colour for the 
         surface.fill((18, 20, 28))
         title = self.title_font.render("Super Break Out", True, (255, 220, 60))
         surface.blit(title, title.get_rect(center=(self.app.size[0]//2, 100)))
@@ -115,6 +128,8 @@ class Introduction(Screen):
     def __init__(self, app):
         super().__init__(app)
         self.font = pygame.font.SysFont(None, 24)
+
+        #intro content
         self.lines = [
             "Welcome to Super Break Out!",
             "",
@@ -131,6 +146,7 @@ class Introduction(Screen):
         ]
 
     def handle_event(self, event):
+        #if user click ESC
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             self.app.change_screen(MainMenu(self.app))
 
@@ -176,29 +192,40 @@ class GamePlay(Screen):
             (0, 0, 255, 1)  #Blue
         ]
         
+        #setting the size of the brick
         brick_w, brick_h = 35, 20
+
+        #a group to put all bricks
         self.bricks = pygame.sprite.Group()
+
+        #initialize the total brick numer
         self.total_bricks = 0
         
         #6 Rows, 18 Columns
         for row in range(6):
             for col in range(18):
+                #use a class from another module to create a brick each loop with given entities
                 x = col * brick_w
                 y = 60 + row * brick_h # Start a bit lower to leave room for score
                 color_data = color_map[row]
                 b = Sprites.Brick(x, y, color_data)
+
+                #add the brick into the whole brick list
                 self.bricks.add(b)
+
+                #add 1 brick to the counting
                 self.total_bricks += 1
 
-        # Paddle and Ball
-        # Requirement: Use selected paddle width
+        #assign paddle and Ball
         self.paddle = Sprites.Paddle(self.screen, app.selected_paddle)
         self.ball = Sprites.Ball(self.screen)
 
+        #set srpite group to put all sprite
         self.allSprites = pygame.sprite.Group()
         self.allSprites.add(self.paddle, self.ball)
         self.allSprites.add(*self.bricks.sprites())
 
+        #setting hitting sound
         self.hit_sound = self.app.hit_sound
 
     def on_enter(self):
@@ -208,7 +235,7 @@ class GamePlay(Screen):
         except: pass
 
     def handle_event(self, event):
-        # Allow ESC to quit to menu
+        #Allow ESC to quit to menu
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 self.app.change_screen(MainMenu(self.app))
@@ -216,51 +243,51 @@ class GamePlay(Screen):
     def update(self):
         self.allSprites.update()
 
-        # 1. Paddle hit ball
+        #Paddle hit ball
         if self.paddle.rect.colliderect(self.ball.rect):
-            # Simple reflection based on hitting the top
+            #Simple reflection based on hitting the top
             if self.ball.rect.bottom >= self.paddle.rect.top:
                  self.ball.bounce_y()
-                 # Prevent ball getting stuck inside paddle
+                 #Prevent ball getting stuck inside paddle
                  self.ball.rect.bottom = self.paddle.rect.top
                  if self.hit_sound: self.hit_sound.play()
 
-        # 2. Ball falling below paddle
+        #Ball falling below paddle
         if self.ball.rect.top > self.screen.get_height():
             self.lives -= 1
             if self.lives > 0:
                 self.ball.reset_position(self.screen)
             else:
-                # Game Over -> Return to menu (or could show Game Over screen)
+                #return to menu (or could show Game Over screen) after game over
                 print("Game Over")
                 self.app.change_screen(MainMenu(self.app))
                 return
 
-        # 3. Ball hit brick
+        #Ball hit brick
         hit_brick = pygame.sprite.spritecollideany(self.ball, self.bricks)
         if hit_brick:
             self.ball.bounce_y() # Bounce vertical usually
             if self.hit_sound: self.hit_sound.play()
             
-            # Add Score
+            #Add Score when hit 
             self.score += hit_brick.score_value
             self.bricks_destroyed += 1
             
-            # Kill brick
+            #remove the brick after hit
             hit_brick.kill()
             
-            # Requirement: Moving bricks
-            # After a shape is destroyed, move rows down slightly
+            #Moving bricks
+            #After a shape is destroyed, move rows down slightly
             for b in self.bricks:
                 b.move_down()
 
-            # Requirement: Increasing Difficulty
-            # When half bricks destroyed, reduce paddle width
+            #Increasing difficulty
+            #When half bricks destroyed, reduce paddle width
             if not self.difficulty_triggered and self.bricks_destroyed >= (self.total_bricks / 2):
                 self.paddle.shrink()
                 self.difficulty_triggered = True
 
-        # Victory Condition
+        #Victory condition
         if len(self.bricks) == 0:
             print("You Win!")
             self.app.change_screen(MainMenu(self.app))
@@ -269,10 +296,11 @@ class GamePlay(Screen):
         surface.blit(self.background, (0,0))
         self.allSprites.draw(surface)
         
-        # Draw UI (Score and Lives)
+        #Draw UI, score and lives
         score_text = self.score_font.render(f"Score: {self.score}", True, (255, 255, 255))
         lives_text = self.score_font.render(f"Lives: {self.lives}", True, (255, 255, 255))
         
+        #
         surface.blit(score_text, (20, 10))
         surface.blit(lives_text, (self.size[0] - 120, 10))
 
@@ -292,28 +320,42 @@ class App:
         # Sound initialization
         try:
             pygame.mixer.init()
-            # Note: Ensure paths are correct on your machine
-            # pygame.mixer.music.load("src/sound/dvofak-9.mp3") 
+            # pygame.mixer.music.load("src/sound/hit.wav") 
             # pygame.mixer.music.set_volume(0.5)
             # pygame.mixer.music.play(-1)
             self.hit_sound = pygame.mixer.Sound("src/sound/hit.wav")
             self.hit_sound.set_volume(0.6)
+        #If the initialization has failed this message will be printed
         except Exception as e:
             print("Audio init failed (files missing?):", e)
+            #after the initialization failed, it will set the sound effect to none to keep the program running
             self.hit_sound = None
 
+        #Check which screen the game in on 
         self.current_screen = MainMenu(self)
+        #If the screen name is on_enter, it will call the fnction to change the screen
         if hasattr(self.current_screen, "on_enter"):
             self.current_screen.on_enter()
 
     def change_screen(self, new_screen):
+        """
+        this method take self and the new_screen (str name) as it parameter
+        it will check which name it is and call the funtion
+        """
+        #if the name is on_exit it will call method on_exit
         if hasattr(self.current_screen, "on_exit"):
             self.current_screen.on_exit()
+
+        #If the name is on_enter, it will call metod on_enter
         self.current_screen = new_screen
         if hasattr(self.current_screen, "on_enter"):
             self.current_screen.on_enter()
 
     def run(self):
+        """
+        it take self as it parameter, it will 
+        """
+
         while self.running:
             dt = self.clock.tick(60) / 1000.0
             for event in pygame.event.get():
