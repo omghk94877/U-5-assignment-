@@ -9,6 +9,10 @@ import Sprites
 
 # button class
 class Button:
+    """
+    This class defines a clickable button with hover effect.
+    """
+
     def __init__(self, rect, text, onclick, font, bg=(80,80,80), hover_bg=(110,110,110), text_color=(255,255,255)):
         self.rect = pygame.Rect(rect)
         self.text = text
@@ -64,7 +68,7 @@ class MainMenu(Screen):
         self.title_font = pygame.font.SysFont(None, 56)
         self.font = pygame.font.SysFont(None, 28)
 
-        # Requirement: Adjustable Paddle Width
+        #Requirement: Adjustable Paddle Width
         self.paddle_options = ["small", "medium", "large", "extra_large"]
         self.current_paddle_idx = 1 # Start at medium
 
@@ -160,24 +164,23 @@ class GamePlay(Screen):
             self.background = pygame.Surface(self.screen.get_size())
             self.background.fill((0,0,0))
 
-        # Requirement: Specific Colors and Points
-        # Row 0 (Top) -> Violet (6pts)
-        # Row 5 (Bottom) -> Blue (1pt)
-        # Order Top to Bottom: Violet, Red, Yellow, Orange, Green, Blue
+        #Row 0  Violet 6pts
+        #Row 5  Blue 1pt
+        #Order Top to Bottom: Violet, Red, Yellow, Orange, Green, Blue
         color_map = [
-            (148, 0, 211, 6),   # Violet
-            (255, 0, 0, 5),     # Red
-            (255, 255, 0, 4),   # Yellow
-            (255, 165, 0, 3),   # Orange
-            (0, 128, 0, 2),     # Green
-            (0, 0, 255, 1)      # Blue
+            (148, 0, 211, 6),  #Violet
+            (255, 0, 0, 5),   #Red
+            (255, 255, 0, 4),   #Yellow
+            (255, 165, 0, 3),   #Orange
+            (0, 128, 0, 2),    #Green
+            (0, 0, 255, 1)  #Blue
         ]
         
         brick_w, brick_h = 35, 20
         self.bricks = pygame.sprite.Group()
         self.total_bricks = 0
         
-        # Requirement: 6 Rows, 18 Columns
+        #6 Rows, 18 Columns
         for row in range(6):
             for col in range(18):
                 x = col * brick_w
