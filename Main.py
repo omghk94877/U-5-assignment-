@@ -1,3 +1,8 @@
+"""
+author : 
+date :
+description : Main application file for Super Break Out game.
+"""
 
 import pygame
 import Sprites  
