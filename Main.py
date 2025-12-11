@@ -80,9 +80,6 @@ class MainMenu(Screen):
         title = self.title_font.render("Super Break Out", True, (255, 220, 60))
         surface.blit(title, title.get_rect(center=(self.app.size[0]//2, 120)))
 
-        desc = self.font.render("Use ← / → or A / D to move. Press ESC in-game to return.", True, (200,200,200))
-        surface.blit(desc, desc.get_rect(center=(self.app.size[0]//2, 170)))
-
         for b in self.buttons:
             b.draw(surface)
 
@@ -279,5 +276,4 @@ class App:
 
 
 # Run the app
-if __name__ == "__main__":
-    App().run()
+App().run()
