@@ -32,6 +32,8 @@ class Button:
         is_hover = self.rect.collidepoint(mouse)
         color = self.hover_bg if is_hover else self.bg
         pygame.draw.rect(surface, color, self.rect, border_radius=6)
+
+        #setting texts and set text's collision box for clicking
         txt = self.font.render(self.text, True, self.text_color)
         txt_rect = txt.get_rect(center=self.rect.center)
         surface.blit(txt, txt_rect)
@@ -46,6 +48,7 @@ class Screen:
     def __init__(self, app):
         self.app = app
 
+    
     def handle_event(self, event):
         pass
     def update(self):
@@ -62,6 +65,8 @@ class MainMenu(Screen):
     """
     """
     def __init__(self, app):
+
+        #adjust menu entities
         super().__init__(app)
         w, h = app.size
         btn_w, btn_h = 240, 50
@@ -72,7 +77,7 @@ class MainMenu(Screen):
 
         #Adjustable paddle width
         self.paddle_options = ["small", "medium", "large", "extra_large"]
-        self.current_paddle_idx = 1 # Start at medium
+        self.current_paddle_idx = 1 #Start at medium
 
         self.paddle_btn = Button((cx, top + 0*(btn_h+14), btn_w, btn_h), 
                                  f"Paddle: {self.paddle_options[self.current_paddle_idx]}", 
@@ -99,12 +104,15 @@ class MainMenu(Screen):
         self.app.selected_paddle = choice
 
     def start_game(self):
+        #to change to the gameplay screen
         self.app.change_screen(GamePlay(self.app))
 
     def show_intro(self):
+        #to change to intro screen
         self.app.change_screen(Introduction(self.app))
 
     def quit_game(self):
+        #to leave the game and eng the loop
         self.app.running = False
 
     def handle_event(self, event):
@@ -123,7 +131,7 @@ class MainMenu(Screen):
         for b in self.buttons:
             b.draw(surface)
 
-# Introduction Screen
+#Introduction screen
 class Introduction(Screen):
     def __init__(self, app):
         super().__init__(app)
@@ -163,16 +171,16 @@ class GamePlay(Screen):
         self.screen = app.screen
         self.size = app.size
         
-        # Game State
+        #game state
         self.lives = 3
         self.score = 0
         self.bricks_destroyed = 0
         self.difficulty_triggered = False
 
-        # Fonts
+        #Fonts
         self.score_font = pygame.font.SysFont(None, 30)
 
-        # Background
+        #Background
         try:
             self.background = pygame.image.load("src\\image\\background.png")
             self.background = pygame.transform.scale(self.background, self.screen.get_size())
@@ -300,7 +308,7 @@ class GamePlay(Screen):
         score_text = self.score_font.render(f"Score: {self.score}", True, (255, 255, 255))
         lives_text = self.score_font.render(f"Lives: {self.lives}", True, (255, 255, 255))
         
-        #
+        #put lives and scores onto screen
         surface.blit(score_text, (20, 10))
         surface.blit(lives_text, (self.size[0] - 120, 10))
 
@@ -353,9 +361,9 @@ class App:
 
     def run(self):
         """
-        it take self as it parameter, it will 
         """
 
+        #running loop
         while self.running:
             dt = self.clock.tick(60) / 1000.0
             for event in pygame.event.get():
