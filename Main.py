@@ -142,7 +142,7 @@ class Introduction(Screen):
             "Welcome to Super Break Out!",
             "",
             "Instructions:",
-            "- Use Left/Right arrows to move.",
+            "- Use Left/Right arrows or use A/D keys to move",
             "- Break bricks to earn points.",
             "- Colors have different points (Blue=1, Violet=6).",
             "- Max Score: 378.",
@@ -243,12 +243,18 @@ class GamePlay(Screen):
         except: pass
 
     def handle_event(self, event):
+        """
+        this medthod will handle the events during the game play
+        """
         #Allow ESC to quit to menu
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 self.app.change_screen(MainMenu(self.app))
 
     def update(self):
+        """
+        this method will update the game state
+        """
         self.allSprites.update()
 
         #Paddle hit ball
@@ -301,6 +307,10 @@ class GamePlay(Screen):
             self.app.change_screen(MainMenu(self.app))
 
     def draw(self, surface):
+        """
+        this medoth will draw everything on the screen
+        it take self and the surface as its parameter
+        """
         surface.blit(self.background, (0,0))
         self.allSprites.draw(surface)
         
@@ -315,6 +325,10 @@ class GamePlay(Screen):
 
 class App:
     def __init__(self, size=(630,700)):
+        """
+        this metod will initialize the game window and settings
+        it take the screen size as its parameter 
+        """
         pygame.init()
         self.size = size
         self.screen = pygame.display.set_mode(size)
@@ -361,6 +375,8 @@ class App:
 
     def run(self):
         """
+        it will run the main loop of the game
+        and check which screen the game is on
         """
 
         #running loop
