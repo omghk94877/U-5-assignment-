@@ -328,9 +328,9 @@ class App:
         # Sound initialization
         try:
             pygame.mixer.init()
-            # pygame.mixer.music.load("src/sound/hit.wav") 
-            # pygame.mixer.music.set_volume(0.5)
-            # pygame.mixer.music.play(-1)
+            pygame.mixer.music.load("music.mp3") 
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.play(-1)
             self.hit_sound = pygame.mixer.Sound("src/sound/hit.wav")
             self.hit_sound.set_volume(0.6)
         #If the initialization has failed this message will be printed
