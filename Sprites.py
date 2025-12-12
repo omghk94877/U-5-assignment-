@@ -192,5 +192,5 @@ class Brick(pygame.sprite.Sprite):
 
     def move_down(self):
         #Move bricks down 1-2 pixels
-        self.pos_y += 1
+        self.pos_y += 4
         self.rect.center = (self.pos_x, self.pos_y)
