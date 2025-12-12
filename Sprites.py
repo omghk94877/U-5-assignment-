@@ -153,7 +153,7 @@ class Brick(pygame.sprite.Sprite):
         
         self.rect.center = (x + 17.5, y + 10)
         self.pos_x = x + 17.5
-        self.pos_y = y + 10
+        self.pos_y = y + 10 
 
     def create_star_image(self):
         #Create a rotating star shape
@@ -188,9 +188,11 @@ class Brick(pygame.sprite.Sprite):
         #plus 3 degree each time
         self.angle = (self.angle + 3) % 360
         self.create_star_image()
-        self.rect.center = (self.pos_x, self.pos_y)
+        self.rect.center = (self.pos_x, self.pos_y)    
+
 
     def move_down(self):
         #Move bricks down a few pixels
-        self.pos_y += 4
+        self.pos_y += 3
         self.rect.center = (self.pos_x, self.pos_y)
+

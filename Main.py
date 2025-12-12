@@ -275,7 +275,10 @@ class GamePlay(Screen):
         hit_brick = pygame.sprite.spritecollideany(self.ball, self.bricks)
         if hit_brick:
             self.ball.bounce_y() # Bounce vertical usually
-            if self.hit_sound: self.hit_sound.play()
+            
+            #play sound effect
+            if self.hit_sound: 
+                self.hit_sound.play()
             
             #Add Score when hit 
             self.score += hit_brick.score_value
