@@ -2,6 +2,7 @@ import pygame
 import math
 
 class Paddle(pygame.sprite.Sprite):
+    """This class defines the sprite for the Paddle."""
 
     #width type default is medium
     def __init__(self, screen, width_type="medium"):
