@@ -14,7 +14,11 @@ class Button:
     """
 
     def __init__(self, rect, text, onclick, font, bg=(80,80,80), hover_bg=(110,110,110), text_color=(255,255,255)):
-        #initialize everything in the introduction screen
+        """
+        this method will initialize the button
+        it take self, rect, text, onclick, font, bg, hover_bg, text_color as its parameter
+        """
+        # initialize everything in the introduction screen
         self.rect = pygame.Rect(rect)
         self.text = text
         self.onclick = onclick
@@ -24,13 +28,25 @@ class Button:
         self.text_color = text_color
 
     def update_text(self, new_text):
+        """
+        this method will update the button text
+        it take self and the new_text as its parameter
+        """
         self.text = new_text
 
     def draw(self, surface):
+        """
+        this method will draw the button on the screen
+        it take self and the surface as its parameter
+        """
         #play hover efffect if mouse on button
         mouse = pygame.mouse.get_pos()
         is_hover = self.rect.collidepoint(mouse)
-        color = self.hover_bg if is_hover else self.bg
+        color = self.hover_bg 
+        if is_hover :
+            color = self.hover_bg
+        else:
+            color = self.bg
         pygame.draw.rect(surface, color, self.rect, border_radius=6)
 
         #setting texts and set text's collision box for clicking
@@ -39,32 +55,65 @@ class Button:
         surface.blit(txt, txt_rect)
 
     def handle_event(self, event):
+        """
+        this method will handle the events during the button
+        it take self and the event as its parameter
+        """
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos):
                 if callable(self.onclick):
                     self.onclick()
 
 class Screen:
+    """
+    this class will define the base screen
+    """
     def __init__(self, app):
+        """
+        this method will initialize the screen
+        it take self and the app as its parameter
+        """
         self.app = app
 
     
     def handle_event(self, event):
+        """
+        this method will handle the events during the screen
+        it take self and the event as its parameter
+        """
         pass
     def update(self):
+        """
+        this method will update the screen
+        """
         pass
     def draw(self, surface):
+        """
+        this method will draw the screen
+        it take self and the surface as its parameter
+        """
         pass
     def on_enter(self):
+        """
+        this method will be called when entering the screen
+        """
         pass
     def on_exit(self):
+        """
+        this method will be called when exiting the screen
+        """
         pass
 
 
 class MainMenu(Screen):
     """
+    this class will define the main menu screen
     """
     def __init__(self, app):
+        """
+        this method will initialize the main menu screen
+        it take self and the app as its parameter
+        """
 
         #adjust menu entities
         super().__init__(app)
@@ -92,7 +141,10 @@ class MainMenu(Screen):
         ]
 
     def cycle_paddle(self):
-
+        """
+        this method will cycle through paddle sizes
+        it take self as its parameter
+        """
         #choosing paddle size
         self.current_paddle_idx = (self.current_paddle_idx + 1) % len(self.paddle_options)
         choice = self.paddle_options[self.current_paddle_idx]
@@ -104,24 +156,44 @@ class MainMenu(Screen):
         self.app.selected_paddle = choice
 
     def start_game(self):
+        """
+        this method will start the game
+        it take self as its parameter
+        """
         #to change to the gameplay screen
         self.app.change_screen(GamePlay(self.app))
 
     def show_intro(self):
+        """
+        this method will show the intro of the game
+        it take self as its parameter
+        """
         #to change to intro screen
         self.app.change_screen(Introduction(self.app))
 
     def quit_game(self):
+        """
+        this method will quit the game
+        it take self as its parameter
+        """
         #to leave the game and eng the loop
         self.app.running = False
 
     def handle_event(self, event):
+        """
+        this method will handle the events during the main menu screen
+        it take self and the event as its parameter
+        """
 
         #exccute the function if one of the button is clicked
         for b in self.buttons:
             b.handle_event(event)
 
     def draw(self, surface):
+        """
+        this method will draw the main menu screen
+        it take self and the surface as its parameter
+        """
 
         #fill colour for the 
         surface.fill((18, 20, 28))
@@ -134,6 +206,10 @@ class MainMenu(Screen):
 #Introduction screen
 class Introduction(Screen):
     def __init__(self, app):
+        """
+        this method will initialize the introduction screen
+        it take self and the app as its parameter
+        """
         super().__init__(app)
         self.font = pygame.font.SysFont(None, 24)
 
@@ -154,11 +230,19 @@ class Introduction(Screen):
         ]
 
     def handle_event(self, event):
+        """
+        this method will handle the events during the introduction screen
+        it take self and the event as its parameter
+        """
         #if user click ESC
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             self.app.change_screen(MainMenu(self.app))
 
     def draw(self, surface):
+        """
+        this method will draw the introduction screen
+        it take self and the surface as its parameter
+        """
         surface.fill((12, 12, 40))
         for i, line in enumerate(self.lines):
             txt = self.font.render(line, True, (230,230,230))
@@ -167,6 +251,10 @@ class Introduction(Screen):
 
 class GamePlay(Screen):
     def __init__(self, app):
+        """
+        this metod will initialize the gameplay screen
+        it take self and the app as its parameter
+        """
         super().__init__(app)
         self.screen = app.screen
         self.size = app.size
@@ -237,6 +325,9 @@ class GamePlay(Screen):
         self.hit_sound = self.app.hit_sound
 
     def on_enter(self):
+        """
+        this metod will be called when entering the gameplay screen
+        """
         try:
             if not pygame.mixer.get_init():
                 pygame.mixer.init()
@@ -345,7 +436,7 @@ class App:
         # Sound initialization
         try:
             pygame.mixer.init()
-            pygame.mixer.music.load("music.mp3") 
+            pygame.mixer.music.load("src/sound/music.mp3") 
             pygame.mixer.music.set_volume(0.5)
             pygame.mixer.music.play(-1)
             self.hit_sound = pygame.mixer.Sound("src/sound/hit.wav")
