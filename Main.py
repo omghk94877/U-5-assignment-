@@ -418,6 +418,9 @@ class GamePlay(Screen):
 
 
 class App:
+    """
+    this class will define the main application
+    """
     def __init__(self, size=(630,700)):
         """
         this metod will initialize the game window and settings

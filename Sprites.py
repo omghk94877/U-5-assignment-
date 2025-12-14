@@ -6,6 +6,9 @@ class Paddle(pygame.sprite.Sprite):
 
     #width type default is medium
     def __init__(self, screen, width_type="medium"):
+        """
+        Initialize the paddle sprite.
+        """
         pygame.sprite.Sprite.__init__(self) 
 
         #get screen infomation
@@ -37,6 +40,9 @@ class Paddle(pygame.sprite.Sprite):
         self.dx = 0
 
     def create_image(self):
+        """
+        Create the paddle image based on current width and height.
+        """
         self.image = pygame.Surface((self.width, self.height))
         self.image.fill(self.color)
         #Add a visual outline
@@ -54,16 +60,25 @@ class Paddle(pygame.sprite.Sprite):
         self.rect.center = center
 
     def moving_left(self):
+        """
+        it moves the paddle left
+        """
         self.dx = -7 # Increased speed slightly for better feel
         if self.rect.left < 0:
             self.rect.left = 0
 
     def moving_right(self):
-          self.dx = 7
-          if self.rect.right > self.screen.get_width():
+        """
+        it moves the paddle right
+        """
+        self.dx = 7
+        if self.rect.right > self.screen.get_width():
             self.rect.right = self.screen.get_width()
 
     def update(self):
+        """
+        update paddle position based on user input.
+        """
         #Reset dx each frame to stop movement if key isn't held
         self.dx = 0 
         keys = pygame.key.get_pressed()
@@ -85,6 +100,9 @@ class Ball(pygame.sprite.Sprite):
   '''This class defines the sprite for the Ball.''' 
   
   def __init__(self, screen): 
+    """
+    Initialize the ball sprite.
+    """
     pygame.sprite.Sprite.__init__(self) 
 
     #setting ball's entities
@@ -102,24 +120,39 @@ class Ball(pygame.sprite.Sprite):
     self.__dy = -4 
     
   def reset_position(self, screen):
-      self.rect.center = (screen.get_width()/2, screen.get_height()/2 + 50)
-      self.__dy = -4 # Reset to moving up
-      self.__dx = 4
+    """
+    Reset ball to starting position.
+    """
+    self.rect.center = (screen.get_width()/2, screen.get_height()/2 + 50)
+    self.__dy = -4 # Reset to moving up
+    self.__dx = 4
 
   def bounce_y(self):
+      """
+      Reverse vertical direction of the ball.
+      """
       #Reverse vertical direction
       self.__dy = -self.__dy
 
   def bounce_x(self):
+      """
+      Reverse horizontal direction of the ball.
+      """
       #Reverse horizontal direction
       self.__dx = -self.__dx
       
   # Kept for compatibility, but splits logic
   def change_direction(self): 
+      """
+      Reverse both horizontal and vertical directions of the ball.
+      """
       self.__dx = -self.__dx 
       self.__dy = -self.__dy
 
-  def update(self): 
+  def update(self):
+    """
+    Update ball position and handle wall collisions.
+    """
     #moving the ball
     self.rect.x += self.__dx
     self.rect.y += self.__dy
@@ -141,7 +174,9 @@ class Ball(pygame.sprite.Sprite):
 
 
 class Brick(pygame.sprite.Sprite):
+    """This class defines the sprite for the Brick."""
     def __init__(self, x, y, color_data):
+        """Initialize the brick sprite."""
         super().__init__()
         # color_data is a tuple: (R, G, B, Score_Value)
         self.color = color_data[:3]
@@ -157,6 +192,9 @@ class Brick(pygame.sprite.Sprite):
         self.pos_y = y + 10 
 
     def create_star_image(self):
+        """
+        Create the star-shaped image for the brick.
+        """
         #Create a rotating star shape
         surface_size = 40
         self.image = pygame.Surface((surface_size, surface_size), pygame.SRCALPHA)
@@ -193,6 +231,9 @@ class Brick(pygame.sprite.Sprite):
 
 
     def move_down(self):
+        """
+        move the brick down a few pixels
+        """
         #Move bricks down a few pixels
         self.pos_y += 3
         self.rect.center = (self.pos_x, self.pos_y)
