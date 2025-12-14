@@ -426,6 +426,7 @@ class App:
         this metod will initialize the game window and settings
         it take the screen size as its parameter 
         """
+        #Initialize Pygame
         pygame.init()
         self.size = size
         self.screen = pygame.display.set_mode(size)
@@ -485,6 +486,7 @@ class App:
                 else:
                     self.current_screen.handle_event(event)
 
+            #update and draw current screen
             self.current_screen.update()
             self.current_screen.draw(self.screen)
             pygame.display.flip()
