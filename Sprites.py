@@ -71,6 +71,7 @@ class Paddle(pygame.sprite.Sprite):
         """
         it moves the paddle right
         """
+        #7 for increase speed for better feel
         self.dx = 7
         if self.rect.right > self.screen.get_width():
             self.rect.right = self.screen.get_width()
@@ -114,7 +115,6 @@ class Ball(pygame.sprite.Sprite):
     
     #Place ball explicitly
     self.reset_position(screen)
-    
     self.__screen = screen 
     self.__dx = 4 
     self.__dy = -4 
@@ -123,6 +123,7 @@ class Ball(pygame.sprite.Sprite):
     """
     Reset ball to starting position.
     """
+    #Center horizontally, slightly above center vertically
     self.rect.center = (screen.get_width()/2, screen.get_height()/2 + 50)
     self.__dy = -4 # Reset to moving up
     self.__dx = 4
@@ -146,6 +147,7 @@ class Ball(pygame.sprite.Sprite):
       """
       Reverse both horizontal and vertical directions of the ball.
       """
+      #Reverse both directions
       self.__dx = -self.__dx 
       self.__dy = -self.__dy
 
@@ -182,11 +184,13 @@ class Brick(pygame.sprite.Sprite):
         self.color = color_data[:3]
         self.score_value = color_data[3]
         
+        #star shape properties
         self.outline_color = (255, 255, 255)
         self.angle = 0
         self.size = 15
         self.create_star_image()
         
+        #Position the brick
         self.rect.center = (x + 17.5, y + 10)
         self.pos_x = x + 17.5
         self.pos_y = y + 10 
@@ -210,6 +214,7 @@ class Brick(pygame.sprite.Sprite):
             else:
                 radius = self.size * 0.4
             
+            #Calculate point position
             angle_rad = math.radians(self.angle + (i * 36))
             px = center_x + radius * math.cos(angle_rad)
             py = center_y - radius * math.sin(angle_rad)
