@@ -16,3 +16,7 @@ how to run :
     1. download both file end in .py and others
     2. extract the file 
     3. run the main.py
+
+incase of any issue like image or sound not found, 
+please refer back to our github 
+https://github.com/omghk94877/U-5-assignment- 
